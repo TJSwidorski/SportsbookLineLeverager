@@ -45,7 +45,7 @@ class Package():
 
     return away_prob, home_prob
   
-  def win_loss(scores):
+  def win_loss(self, scores):
     """
     Given scores, converts the home and away scores into
     a 1 for a win and a 0 for a loss. In the case of a tie,
@@ -59,7 +59,7 @@ class Package():
     else:
       return None, None
 
-  def to_values(self, ):
+  def to_values(self):
     """
     Takes a df of american sportsbook lines and game scores
     and converts the lines into true probabilites and the scores
@@ -71,7 +71,7 @@ class Package():
     away_scores_array = []
     home_scores_array = []
 
-    for _, val in self.df.iterrrows():
+    for _, val in self.df.iterrows():
       #Get the away and home lines
       away_lines = val['Away Lines']
       home_lines = val['Home Lines']
@@ -98,15 +98,15 @@ class Package():
       away_scores_array.append(a)
       home_scores_array.append(h)
 
-      #Update df
-      self.df['Away Odds'] = away_lines_array
-      self.df['Home Odds'] = home_lines_array
-      del self.df['Away Lines']
-      del self.df['Home Lines']
-      self.df['Away W/L'] = away_scores_array
-      self.df['Home W/L'] = home_scores_array
-      del self.df['Away Score']
-      del self.df['Home Score']
+    #Update df
+    self.df['Away Odds'] = away_lines_array
+    self.df['Home Odds'] = home_lines_array
+    del self.df['Away Lines']
+    del self.df['Home Lines']
+    self.df['Away W/L'] = away_scores_array
+    self.df['Home W/L'] = home_scores_array
+    del self.df['Away Score']
+    del self.df['Home Score']
 
   def return_df(self):
     """

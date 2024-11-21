@@ -1,6 +1,7 @@
 import sports
 import retrieve
 import package
+import pandas as pd
 
 if __name__ == '__main__':
   #NFL Display
@@ -31,4 +32,24 @@ if __name__ == '__main__':
   df = retrieve.SportsbookReviewAPI(nfl.money_line, 'Money Line', 'Week', week).return_data()
   pack = package.Package(df)
   df = pack.return_df()
+  print(df)
+
+  #Package Multiple Weeks Together
+  print("NFL Multi-Week Information")
+  df_list = []
+  week = 1
+  while week <= 10:
+    try:
+      nfl = sports.NFL(week)
+      df = retrieve.SportsbookReviewAPI(nfl.money_line, 'Money Line', 'Week', week).return_data()
+      print("Week ", week)
+      pack = package.Package(df)
+      df = pack.return_df()
+      df_list.append(df)
+      week += 1
+    except:
+      print("Error")
+      week += 1
+
+  df = pd.concat(df_list)
   print(df)

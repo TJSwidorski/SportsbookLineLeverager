@@ -202,10 +202,9 @@ class TotalsAPI():
 class SportsbookReviewAPI():
   """
   A class for creating a DataFrame for the specified bet type [bet_type],
-  given the correct sport url, the date type which identifies the sport
-  as a weekly or daily sport [date_type], and the associated date [date]
-  either as an int if it is a weekly sport or as a string if it is a daily
-  sport.
+  given the (correct) sport url, the date type [date_type] (which identifies the
+  sport as weekly or daily), and the associated date [date], either as an int if
+  a weekly sport or a string if a daily sport.
   """
   def __init__(self, url, bet_type: str, date_type: str, date):
     """
@@ -280,7 +279,7 @@ class SportsbookReviewAPI():
     
     return scores
   
-  def return_data(self):
+  def return_data(self) -> pd.DataFrame:
     """
     Returns the DataFrame created when the class was initialized.
     """

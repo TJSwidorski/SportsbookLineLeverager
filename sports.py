@@ -56,14 +56,17 @@ class NFL():
   """
   The base class for NFL data.
   """
-  def __init__(self, week_num: int):
+  def __init__(self, week_num):
     """
     Creates the links for each bet type and time type for the NFL.
     """
     #Set week as a string
-    self.__week = str(week_num)
+    if type(week_num) == int:
+      self.__week = "Week" + str(week_num)
+    elif type(week_num) == str:
+      self.__week = week_num
     #Initialize the base url
-    self.__base_url = "https://sportsbookreview.com/betting-odds/nfl-football/?week=Week"
+    self.__base_url = "https://sportsbookreview.com/betting-odds/nfl-football/?week="
     #Create the base links
     self.links = BetTypes(self.__base_url, self.__week)
     #Set full-game spread link

@@ -1,16 +1,23 @@
+import pandas as pd
+
 class Package():
   """
   Packages Sportsbook line data so it can be processed
   in Neural Networks and other machine learning programs.
   """
-  def __init__(self, df):
+  def __init__(self, df, true_prob = True):
     """
     Takes a DataFrame of sportsbetting data and converts
     the american sportsbook lines into true probability and
     converts the scores into Win/Loss representations.
     """
     self.df = df
-    self.to_values()
+    self.away_df = None
+    self.home_df = None
+    if true_prob:
+      self.to_values()
+    else:
+      self.to_nb_values()
 
   def implied_prob(self, line):
     """
@@ -79,7 +86,7 @@ class Package():
       away_array = []
       home_array = []
 
-      #Get the away and hoe scores
+      #Get the away and home scores
       away_score = val['Away Score']
       home_score = val['Home Score']
 
@@ -108,8 +115,62 @@ class Package():
     del self.df['Away Score']
     del self.df['Home Score']
 
+  def to_nb_values(self):
+    """
+    Takes a df of american sportsbook lines and game scores
+    and converts the scores into a 1 for a win and a 0 for a loss.
+
+    Packages the data into independent home and away dataframes. 
+    """
+    #Initialize the end arrays
+    away_lines_array = []
+    home_lines_array = []
+    away_scores_array = []
+    home_scores_array = []
+
+    for _, val in self.df.iterrows():
+      #Get the away and home lines
+      away_lines = val['Away Lines']
+      home_lines = val['Home Lines']
+
+      #Get the away and home scores
+      away_score = val['Away Score']
+      home_score = val['Home Score']
+
+      away_lines_array.append(away_lines)
+      home_lines_array.append(home_lines)
+
+      #Calculate Win/Loss
+      a, h = self.win_loss([away_score, home_score])
+      away_scores_array.append(a)
+      home_scores_array.append(h)
+
+    #Update df
+    self.away_df = pd.DataFrame(columns=['Away Lines', 'Away W/L'])
+    self.away_df['Away Lines'] = away_lines_array
+    self.away_df['Away W/L'] = away_scores_array
+    self.home_df = pd.DataFrame(columns=['Home Lines', 'Home W/L'])
+    self.home_df['Home Lines'] = home_lines_array
+    self.home_df['Home W/L'] = home_scores_array
+
   def return_df(self):
     """
     Returns the current DataFrame.
     """
     return self.df
+  
+  def return_away(self):
+    """
+    Returns the away DataFrame if created.
+
+    Returns None if the DataFrame is not created.
+    """
+    return self.away_df
+  
+  def return_home(self):
+    """
+    Returns the home DataFrame if created.
+
+    Returns None if the DataFrame is not created.
+    """
+    return self.home_df

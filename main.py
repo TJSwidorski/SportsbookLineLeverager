@@ -2,6 +2,7 @@ import sports
 import retrieve
 import package
 import pandas as pd
+import bayes as bn
 
 if __name__ == '__main__':
   #NFL Display
@@ -10,6 +11,12 @@ if __name__ == '__main__':
   nfl = sports.NFL(week)
   df = retrieve.SportsbookReviewAPI(nfl.money_line, 'Money Line', 'Week', week).return_data()
   print(df)
+  
+  pack = package.Package(df, true_prob=False)
+  away_df = pack.return_away()
+  home_df = pack.return_home()
+  print(away_df)
+  print(home_df)
 
   #NHL Display
   print("NHL Display")

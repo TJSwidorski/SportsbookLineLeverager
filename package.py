@@ -11,7 +11,7 @@ class Package():
     the american sportsbook lines into true probability and
     converts the scores into Win/Loss representations.
     """
-    self.df = df
+    self.df = df.dropna()
     self.away_df = None
     self.home_df = None
     if true_prob:

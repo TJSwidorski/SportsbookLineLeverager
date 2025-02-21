@@ -57,14 +57,21 @@ class NaiveBayes():
 
       #Calculate P(Line|Win) = # line when win / # wins
       num_line_win = 0
-      for n in range(len(self.win_data())):
-        if self.data[f"{self.home_away} Lines"][n][i] == line:
+      win_df = self.win_data().reset_index(drop=True)
+      for n in range(len(win_df)):
+        if len(win_df[f"{self.home_away} Lines"][n]) < len(x):
+          continue
+        if win_df[f"{self.home_away} Lines"][n][i] == line:
           num_line_win += 1
 
       #Calculate P(Line|Loss) = # line when loss / # losses
       num_line_loss = 0
-      for n in range(len(self.loss_data())):
-        if self.data[f"{self.home_away} Lines"][n][i] == line:
+      loss_df = self.loss_data().reset_index(drop=True)
+      for n in range(len(loss_df)):
+        #If the game does not include enough data, do not include it
+        if len(loss_df[f"{self.home_away} Lines"][n]) < len(x):
+          continue
+        if loss_df[f"{self.home_away} Lines"][n][i] == line:
           num_line_loss += 1
 
       #To avoid rounding errors, preserve data in list and calculate at the end.

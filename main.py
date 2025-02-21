@@ -3,6 +3,7 @@ import retrieve
 import package
 import pandas as pd
 import bayes as bn
+from datetime import datetime, timedelta
 
 if __name__ == '__main__':
   #NFL Display
@@ -41,7 +42,7 @@ if __name__ == '__main__':
   df = pack.return_df()
   print(df)
 
-  #Package Multiple Weeks Together
+  #Package Multiple NFL Weeks Together
   print("NFL Multi-Week Information")
   df_list = []
   week = 1
@@ -57,6 +58,26 @@ if __name__ == '__main__':
     except:
       print("Error")
       week += 1
+
+  df = pd.concat(df_list)
+  print(df)
+
+# Retrieve Multiple NHL Days Together
+  print("NHL Multi-Week Information")
+  df_list = []
+  date = '2024-07-01'
+  while date != '2024-10-09':
+    try:
+      nhl = sports.NHL(date)
+      df = retrieve.SportsbookReviewAPI(nhl.money_line, 'Money Line', 'Date', date).return_data()
+      print("Date: ", date)
+      df_list.append(df)
+      date = (datetime.strptime(date, '%Y-%m-%d') + timedelta(days=1))
+      date = date.strftime('%Y-%m-%d')
+    except:
+      print("Error")
+      date = (datetime.strptime(date, '%Y-%m-%d') + timedelta(days=1))
+      date = date.strftime('%Y-%m-%d')
 
   df = pd.concat(df_list)
   print(df)
